@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>Sidang Tugas Akhir</h2>
+					<h3>Penerapan Algoritma RSA dan <em>Stream Cipher</em> Rabbit pada Aplikasi <em>Chatting</em></h3>
+					<p>
+						<small>Riyan Winangsih / J2F008067</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Latar Belakang</h2>
+					<ul>
+						<li>aplikasi <em>chatting</em></li>
+						<li>keamanan data yang ditransmisikan</li>
+						<li>kombinasi kriptografi asimetris dan simetris</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Rumusan Masalah</h2>
+					<p>Bagaimana menerapkan algoritma RSA dan <em>stream cipher</em> Rabbit pada aplikasi <em>chatting</em>.</p>
+				</section>
+
+				<section>
+					<h2>Tujuan</h2>
+					<p>Menghasilkan sebuah aplikasi <em>chatting</em> yang menerapkan algoritma RSA dan <em>stream cipher</em> Rabbit untuk mengenkripsi data yang ditransmisikan.</p>
+				</section>
+
+				<section>
+					<h2>Manfaat</h2>
+					<p>Informasi dari pesan yang ditukarkan antara dua pengguna aplikasi <em>chatting</em> dapat tersampaikan.</p>
+				</section>
+
+				<section>
+					<section>
+						<h2>Ruang Lingkup</h2>
+						<ul>
+							<li>Pengamanan diterapkan pada <em>live chatting</em> sebagai <em>customer service</em> antara pengujung <em>website</em> dengan <em>administrator website</em>.</li>
+							<li>Aplikasi <em>chatting</em> ini terdiri atas Aplikasi <em>Chat Client</em> dan Aplikasi <em>Chat Server</em> yang berbasis <em>web</em>. Aplikasi <em>Chat Client</em> dibedakan menjadi Aplikasi <em>Dashboard Client</em> dan Aplikasi <em>Widget Client</em>.</li>
+							<li>Aplikasi <em>Dashboard Client</em> digunakan oleh <em>administrator website</em> untuk melihat pesan yang dikirimkan pengunjung <em>website</em> dan memberikan pesan respon.</li>
+						</ul>
+					</section>
+					<section>
+						<ul>
+							<li>Aplikasi <em>Widget Client</em> digunakan oleh pengunjung <em>website</em> untuk mengirimkan pesan kepada <em>administrator website</em>.</li>
+							<li>Data yang diamankan berupa teks atau <em>string</em> dengan panjang maksimal 128 karakter.</li>
+							<li>Pertukaran kunci pengguna menggunakan algoritma RSA.</li>
+							<li>Pembentukan <em>keystream</em>, proses enkripsi, dan dekripsi menggunakan <em>stream cipher</em> Rabbit.</li>
+							<li>Bentuk implementasinya menggunakan Node.js dan basis data MongoDB.</li>
+							<li>Model proses yang digunakan adalah <em>Unified Process</em>.</li>
+						</ul>
+					</section>
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h1>Dasar Teori</h1>
+				</section>
+
+				<section>
+					<h2>Kriptografi</h2>
+					<p>
+						Penulisan rahasia dengan tujuan menyembunyikan arti dari pesan (Paar & Pelzl, 2010).
+					</p>
+					<img src="lib/img/gambar2.2.png" alt="">
+				</section>
+
+				<section>
+					<h2>Kriptografi Asimetris</h2>
+					<p>
+						Kunci untuk enkripsi berbeda dengan kunci untuk dekripsi.
+					</p>
+					<img src="lib/img/gambar2.3.png" alt="">
+				</section>
+
+				<section>
+					<section>
+						<h2>RSA</h2>
+						<p>
+							Algoritma RSA ditemukan oleh Ronald Rivest, Adi Shamir, dan Leonard Adleman, pada tahun 1977. Keamanan algoritma RSA terletak pada sulitnya memfaktorkan bilangan-bilangan yang besar menjadi faktor prima (Caroline, 2011)
+						</p>
+					</section>
+
+					<section>
+						<img src="lib/img/gambar2.4.png" alt="" height="300" width="900">
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Algoritma Rabbit</h2>
+						<p>Algoritma Rabbit adalah algoritma yang ditemukan oleh Martin Boesgaard, Mette Vesterager, Jesper Christiansen, dan Ove Scavenius pada <em>Fast Software Encryption</em> tahun 2003 (Adwitya, 2006).</p>
+					</section>
+
+					<section>
+						Tujuan dari desain algoritma Rabbit adalah untuk mengambil keuntungan dari sifat <em>real-valued chaotic maps</em> dan tetap menciptakan kriptografi yang aman dan optimal dalam bentuk diskrit.
+					</section>
+
+					<section>
+						Desain algoritma Rabbit dimulai dengan membuat <em>chaotic system</em> dari <em>non-linear maps</em> yang berpasangan (Adwitya, 2006).
+					</section>
+
+					<section data-background-video="lib/video/example.mp4" data-background-color="#000000">
+					</section>
+				</section>
+
+				<section>
+					<h2><em>Unified Process</em></h2>
+					<ul>
+						<li>Proses pengembangan perangkat lunak, terutama untuk perangkat lunak yang dibuat berorientasi objek</li>
+						<li>Bertujuan untuk membangun sebuah <em>framework</em> yang bisa diubah-ubah sesuai kepentingan organisasi dan proyek lain yang lebih spesifik</li>
+						<li>Konsep <em>coding reuse</em> dapat diterapkan</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Diagram UML yang Digunakan</h2>
+					<ul>
+						<li><em>Use Case Diagram</em></li>
+						<li><em>Class Diagram</em></li>
+						<li><em>Sequence Diagram</em></li>
+						<li><em>Activity Diagram</em></li>
+						<li><em>Deployment Diagram</em></li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>Node.JS</h2>
+						<p>Node.js adalah <em>platform</em> yang dibangun pada <em>Chrome JavaScript runtime</em> untuk membangun aplikasi jaringan dengan mudah, cepat, dan <em>scalable</em>. Node.js menggunakan <em>event-driven</em>, <em>non-blocking I/O model</em> yang membuat Node.js ringan dan efisien, cocok untuk aplikasi <em>data-intesive real-time</em> yang berjalan di perangkat terdistribusi (Joyent, 2012).</p>
+					</section>
+
+					<section>
+						<h2>NPM</h2>
+						<p>npm adalah sebuah <em>package manager</em> untuk <em>JavaScript</em>. npm memudahkan <em>JavaScript developers</em> untuk <em>share, reuse code,</em> dan memudahkan <em>update code</em> yang telah di-<em>sharing</em> (npm, Inc., 2015)</p>
+					</section>
+
+					<section>
+						<h2>Express.js</h2>
+						<p>Express.js adalah <em>framework</em> Node.js yang minimalis dan fleksibel untuk membangun sebuah aplikasi <em>web</em> (StrongLoop, 2015).</p>
+					</section>
+
+					<section>
+						<h2>Socket.io</h2>
+						<p>Socket.io adalah sebuah <em>library JavaScript</em> untuk aplikasi <em>web real time</em> yang ditujukan untuk setiap <em>browser</em> dan <em>mobile device</em> (Automattic Inc., 2015). </p>
+					</section>
+				</section>
+
+				<section>
+					<h2>MongoDB</h2>
+					<p>MongoDB merupakan salah satu dari <em>Document Stores</em>. MongoDB merupakan DBMS yang bersifat <em>schema free</em> dan <em>open source</em>. (Plugge, et al., 2010). </p>
+					<img src="lib/img/gambar2.23.png" alt="">
+				</section>
+
+				<section>
+					<h2><em>Local Storage</em></h2>
+					<p><em>Local Storage</em> atau HTML5 <em>Storage</em> adalah cara sebuah halaman <em>web</em> untuk menyimpan pasangan <em>key/value</em> secara lokal, di dalam <em>web browser</em> (Pilgrim, n.d.).</p>
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h1>Fase <em>Inception</em></h1>
+				</section>
+
+				<section>
+					<h2>Alur Proses Aplikasi <em>Chatting</em></h2>
+					<img src="lib/img/gambar3.1.png" alt="">
+				</section>
+
+				<section>
+					<h2><em>Use Case Diagram</em></h2>
+					<img src="lib/img/gambar3.2.png" alt="">
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h1>Fase <em>Elaboration</em></h1>
+				</section>
+
+				<section>
+					<h2>Lorem Ipsum</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec purus urna. Vivamus elementum, ante sagittis sollicitudin ullamcorper, eros mauris laoreet turpis, quis placerat dolor lacus bibendum lacus. Quisque euismod tempus posuere. Phasellus vehicula eu elit dignissim pellentesque. </p>
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h1>Fase <em>Construction</em></h1>
+				</section>
+
+				<section>
+					<h2>Demo Aplikasi</h2>
+				</section>
+				
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h1>Pengujian</h1>
+				</section>
+
+				<section>
+					<section>
+						<h2>Spesifikasi Perangkat</h2>
+						<ul>
+							<li>CPU : Prosesor Intel Core i3-2350M CPU @ 2.30GHz</li>
+							<li>Memori : 6,00GB</li>
+							<li>Sistem Operasi : Windows 7 Ultimate 64-bit</li>
+							<li>Node.js Version :	0.12.1</li>
+							<li>DBMS : MongoDB 3.0.1</li>
+							<li>Web Browser : Mozila Firefox 38.0.5, Google Chrome 43.0.2357.130</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2><em>Generate</em> Kunci RSA</h2>
+						<img src="lib/img/gambar4.24.png" alt="">
+					</section>
+
+					<section>
+						<h2><em>Key Exchange</em></h2>
+						<img src="lib/img/gambar4.25.png" alt="">
+					</section>
+
+					<section>
+						<h2><em>Log Message</em> Pada Server</h2>
+						<img src="lib/img/gambar4.26.png" alt="">
+					</section>
+					
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h1>Penutup</h1>
+				</section>
+
+				<section>
+					<h2>Kesimpulan</h2>
+					<p>Kesimpulan yang dapat diambil dari pembuatan tugas akhir ini adalah dihasilkan aplikasi <em>chatting</em> berbasis <em>web</em> yang dapat mengamankan data yang ditransmisikan dari penyadapan. Dari hasil pengujian nampak bahwa data yang ditransmisikan oleh aplikasi dalam bentuk <em>ciphertext</em>. Sehingga walaupun penyadap mendapatkan data yang ditransimisikan, penyadap tidak mengerti informasi yang dikirimkan.</p>
+				</section>
+
+				<section>
+					<h2>Saran</h2>
+					<ul>
+						<li>Aplikasi <em>widget</em> dapat dipasang langsung pada <em>website</em>, tanpa menggunakan <em>link</em> untuk membuka aplikasi ke <em>tab browser</em> yang lain.</li>
+						<li>Mengembangkan aplikasi <em>chatting</em> dengan menerapkan algoritma RSA dan <em>stream cipher</em> Rabbit pada <em>mobile application</em>.</li>
+						<li>Menggunakan kombinasi metode kriptografi lain agar tingkat keamanannya semakin tangguh.</li>
+					</ul>
+				</section>
+				
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h1>Terima Kasih</h1>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
